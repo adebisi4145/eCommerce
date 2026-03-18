@@ -1,0 +1,51 @@
+# Visual Studio / Rider / VS Code
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.idea/
+.vscode/
+
+# Build results
+bin/
+obj/
+out/
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.nupkg
+*.snk
+
+# Rider / JetBrains
+*.sln.iml
+
+# User secrets
+secrets.json
+appsettings.Development.json
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# Dotnet Tools
+.tools/
+
+# Publish folder
+publish/
+
+# ASP.NET Temporary Files
+*.vsix
+*.dbmdl
+*.bak
+
+# Mac / Linux
+.DS_Store
+Thumbs.db
