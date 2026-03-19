@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using eCommerce.Domain.Entities;
 
 namespace eCommerce.Infrastructure.Data
@@ -16,7 +17,7 @@ namespace eCommerce.Infrastructure.Data
                 u.HasKey(x => x.Id);
                 u.HasIndex(x => x.Email).IsUnique();
 
-                u.OwnsMany(typeof(Address), "_addresses", a =>
+                u.OwnsMany(x => x.Addresses, a =>
                 {
                     a.WithOwner().HasForeignKey("UserId");
                     a.Property<Guid>("Id");

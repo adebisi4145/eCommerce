@@ -6,7 +6,7 @@ using System.Text;
 
 namespace eCommerce.Infrastructure.Auth
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
 
@@ -14,6 +14,7 @@ namespace eCommerce.Infrastructure.Auth
         {
             _configuration = configuration;
         }
+
         public string GenerateToken(User user)
         {
             var claims = new[]
@@ -36,7 +37,6 @@ namespace eCommerce.Infrastructure.Auth
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
     }
 }
