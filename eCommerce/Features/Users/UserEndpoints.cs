@@ -1,4 +1,5 @@
-﻿using eCommerce.Features.Users.Login;
+﻿using eCommerce.Features.Users.AddAddress;
+using eCommerce.Features.Users.Login;
 using eCommerce.Features.Users.Profile;
 using eCommerce.Features.Users.Register;
 using eCommerce.Infrastructure.Auth;
@@ -28,6 +29,13 @@ namespace eCommerce.Features.Users
 
                 var result = await mediator.Send(new GetProfileQuery(userId));
 
+                return Results.Ok(result);
+
+            }).RequireAuthorization();
+
+            app.MapPost("/api/users/addresses", async (AddAddressCommand command, IMediator mediator) =>
+            {
+                var result = await mediator.Send(command);
                 return Results.Ok(result);
 
             }).RequireAuthorization();
