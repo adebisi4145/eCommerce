@@ -50,6 +50,13 @@ namespace eCommerce.Features.Users
                 return Results.Ok(result);
 
             }).RequireAuthorization();
+
+            app.MapPut("/api/users/addresses/{addressId:guid}/default", async (Guid addressId, IMediator mediator) =>
+            {
+                await mediator.Send(new SetDefaultAddressCommand(addressId));
+                return Results.NoContent();
+
+            }).RequireAuthorization();
         }
     }
 }
