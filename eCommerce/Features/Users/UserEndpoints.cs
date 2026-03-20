@@ -6,6 +6,7 @@ using eCommerce.Features.Users.Profile;
 using eCommerce.Features.Users.Register;
 using eCommerce.Features.Users.RemoveAddress;
 using eCommerce.Features.Users.SetDefaultAddress;
+using eCommerce.Features.Users.UpdateAddress;
 using eCommerce.Infrastructure.Auth;
 using MediatR;
 
@@ -27,11 +28,9 @@ namespace eCommerce.Features.Users
                 return Results.Ok(result);
             });
 
-            app.MapGet("/api/users/me", async (IMediator mediator, ICurrentUserService currentUser) =>
+            app.MapGet("/api/users/me", async (IMediator mediator) =>
             {
-                var userId = currentUser.GetUserId();
-
-                var result = await mediator.Send(new GetProfileQuery(userId));
+                var result = await mediator.Send(new GetProfileQuery());
 
                 return Results.Ok(result);
 
@@ -61,6 +60,16 @@ namespace eCommerce.Features.Users
             app.MapDelete("/api/users/addresses/{addressId:guid}", async (Guid addressId, IMediator mediator) =>
             {
                 await mediator.Send(new RemoveAddressCommand(addressId));
+                return Results.NoContent();
+
+            }).RequireAuthorization();
+
+            app.MapPut("/api/users/addresses/{addressId:guid}", async (Guid addressId, UpdateAddressCommand command, IMediator mediator) =>
+            {
+                var updatedCommand = command with { AddressId = addressId };
+
+                await mediator.Send(updatedCommand);
+
                 return Results.NoContent();
 
             }).RequireAuthorization();

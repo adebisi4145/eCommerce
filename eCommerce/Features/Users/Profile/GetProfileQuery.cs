@@ -2,5 +2,5 @@
 
 namespace eCommerce.Features.Users.Profile
 {
-    public record GetProfileQuery(Guid UserId) : IRequest<GetProfileResponse>;
+    public record GetProfileQuery() : IRequest<GetProfileResponse>;
 }
