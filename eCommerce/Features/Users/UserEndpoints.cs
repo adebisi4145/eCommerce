@@ -57,6 +57,13 @@ namespace eCommerce.Features.Users
                 return Results.NoContent();
 
             }).RequireAuthorization();
+
+            app.MapDelete("/api/users/addresses/{addressId:guid}", async (Guid addressId, IMediator mediator) =>
+            {
+                await mediator.Send(new RemoveAddressCommand(addressId));
+                return Results.NoContent();
+
+            }).RequireAuthorization();
         }
     }
 }
