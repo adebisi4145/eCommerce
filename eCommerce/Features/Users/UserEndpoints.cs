@@ -1,7 +1,11 @@
-﻿using eCommerce.Features.Users.AddAddress;
+﻿using eCommerce.Domain.Entities;
+using eCommerce.Features.Users.AddAddress;
+using eCommerce.Features.Users.GetAddresses;
 using eCommerce.Features.Users.Login;
 using eCommerce.Features.Users.Profile;
 using eCommerce.Features.Users.Register;
+using eCommerce.Features.Users.RemoveAddress;
+using eCommerce.Features.Users.SetDefaultAddress;
 using eCommerce.Infrastructure.Auth;
 using MediatR;
 
@@ -36,6 +40,13 @@ namespace eCommerce.Features.Users
             app.MapPost("/api/users/addresses", async (AddAddressCommand command, IMediator mediator) =>
             {
                 var result = await mediator.Send(command);
+                return Results.Ok(result);
+
+            }).RequireAuthorization();
+
+            app.MapGet("/api/users/addresses", async (IMediator mediator) =>
+            {
+                var result = await mediator.Send(new GetAddressesQuery());
                 return Results.Ok(result);
 
             }).RequireAuthorization();
