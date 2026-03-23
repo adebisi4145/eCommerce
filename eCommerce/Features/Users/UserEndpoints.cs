@@ -16,19 +16,21 @@ namespace eCommerce.Features.Users
     {
         public static void MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("/api/users/register", async (RegisterUserCommand command, IMediator mediator) =>
+            var users = app.MapGroup("/api/users");
+
+            users.MapPost("/register", async (RegisterUserCommand command, IMediator mediator) =>
             {
                 var result = await mediator.Send(command);
                 return Results.Ok(result);
             });
 
-            app.MapPost("/api/users/login", async (LoginUserCommand command, IMediator mediator) =>
+            users.MapPost("/login", async (LoginUserCommand command, IMediator mediator) =>
             {
                 var result = await mediator.Send(command);
                 return Results.Ok(result);
             });
 
-            app.MapGet("/api/users/me", async (IMediator mediator) =>
+            users.MapGet("/me", async (IMediator mediator) =>
             {
                 var result = await mediator.Send(new GetProfileQuery());
 
@@ -36,35 +38,37 @@ namespace eCommerce.Features.Users
 
             }).RequireAuthorization();
 
-            app.MapPost("/api/users/addresses", async (AddAddressCommand command, IMediator mediator) =>
+            var addresses = users.MapGroup("/addresses").RequireAuthorization();
+
+            addresses.MapPost("/", async (AddAddressCommand command, IMediator mediator) =>
             {
                 var result = await mediator.Send(command);
                 return Results.Ok(result);
 
-            }).RequireAuthorization();
+            });
 
-            app.MapGet("/api/users/addresses", async (IMediator mediator) =>
+            addresses.MapGet("/", async (IMediator mediator) =>
             {
                 var result = await mediator.Send(new GetAddressesQuery());
                 return Results.Ok(result);
 
-            }).RequireAuthorization();
+            });
 
-            app.MapPut("/api/users/addresses/{addressId:guid}/default", async (Guid addressId, IMediator mediator) =>
+            addresses.MapPut("/{addressId:guid}/default", async (Guid addressId, IMediator mediator) =>
             {
                 await mediator.Send(new SetDefaultAddressCommand(addressId));
                 return Results.NoContent();
 
-            }).RequireAuthorization();
+            });
 
-            app.MapDelete("/api/users/addresses/{addressId:guid}", async (Guid addressId, IMediator mediator) =>
+            addresses.MapDelete("/{addressId:guid}", async (Guid addressId, IMediator mediator) =>
             {
                 await mediator.Send(new RemoveAddressCommand(addressId));
                 return Results.NoContent();
 
-            }).RequireAuthorization();
+            });
 
-            app.MapPut("/api/users/addresses/{addressId:guid}", async (Guid addressId, UpdateAddressCommand command, IMediator mediator) =>
+            addresses.MapPut("/{addressId:guid}", async (Guid addressId, UpdateAddressCommand command, IMediator mediator) =>
             {
                 var updatedCommand = command with { AddressId = addressId };
 
@@ -72,7 +76,7 @@ namespace eCommerce.Features.Users
 
                 return Results.NoContent();
 
-            }).RequireAuthorization();
+            });
         }
     }
 }
