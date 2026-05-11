@@ -7,18 +7,20 @@
         public string LastName { get; private set; } = string.Empty;
         public string Email { get; private set; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
+        public string Role { get; private set; } = "User";
         private readonly List<Address> _addresses = new();
         public IReadOnlyCollection<Address> Addresses => _addresses;
 
         private User() { }
 
-        public User(string email, string passwordHash, string firstName, string lastName)
+        public User(string email, string passwordHash, string firstName, string lastName, string role = "User")
         {
             Id = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
             Email = email.ToLowerInvariant();
             PasswordHash = passwordHash;
+            Role = role;
         }
 
         public void AddAddress(Address address)
