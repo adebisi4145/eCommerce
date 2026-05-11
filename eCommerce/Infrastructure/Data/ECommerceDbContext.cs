@@ -12,6 +12,22 @@ namespace eCommerce.Infrastructure.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Cart>(c =>
+            {
+                c.HasKey(x => x.Id);
+                c.HasIndex(x => x.UserId).IsUnique();
+
+                c.OwnsMany(x => x.Items, i =>
+                {
+                    i.WithOwner().HasForeignKey("CartId");
+                    i.Property<Guid>("Id");
+                    i.HasKey("Id");
+                });
+
+                c.Navigation(nameof(Cart.Items))
+                    .UsePropertyAccessMode(PropertyAccessMode.Field);
+            });
+
             builder.Entity<User>(u =>
             {
                 u.HasKey(x => x.Id);
@@ -31,5 +47,6 @@ namespace eCommerce.Infrastructure.Data
         public DbSet<User> Users { get;set; }
         public DbSet<Product> Products { get;set; }
         public DbSet<Category> Categories { get;set; }
+        public DbSet<Cart> Carts { get;set; }
     }
 }
