@@ -2,6 +2,7 @@ using eCommerce.Infrastructure.Extensions;
 using eCommerce.Infrastructure.Middleware;
 using eCommerce.Features.Users;
 using eCommerce.Features.Products;
+using eCommerce.Features.Categories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -54,5 +55,6 @@ app.UseAuthorization();
 
 app.MapUserEndpoints();
 app.MapProductEndPoints();
+app.MapCategoryEndpoints();
 
 app.Run();
