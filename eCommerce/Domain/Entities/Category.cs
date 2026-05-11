@@ -12,5 +12,10 @@
             Id = Guid.NewGuid();
             Name = name;
         }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+        }
     }
 }
