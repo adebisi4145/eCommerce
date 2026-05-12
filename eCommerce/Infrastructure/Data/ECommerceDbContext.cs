@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using eCommerce.Domain.Entities;
+using eCommerce.Domain.Enums;
+using eCommerce.Domain.Enums;
 
 namespace eCommerce.Infrastructure.Data
 {
@@ -12,6 +14,25 @@ namespace eCommerce.Infrastructure.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Order>(o =>
+            {
+                o.HasKey(x => x.Id);
+
+                o.Property(x => x.Status)
+                    .HasConversion<string>();
+
+                o.OwnsMany(x => x.Items, i =>
+                {
+                    i.WithOwner().HasForeignKey("OrderId");
+                    i.Property<Guid>("Id");
+                    i.HasKey("Id");
+                    i.Ignore(x => x.Subtotal);
+                });
+
+                o.Navigation(nameof(Order.Items))
+                    .UsePropertyAccessMode(PropertyAccessMode.Field);
+            });
+
             builder.Entity<Cart>(c =>
             {
                 c.HasKey(x => x.Id);
@@ -48,5 +69,6 @@ namespace eCommerce.Infrastructure.Data
         public DbSet<Product> Products { get;set; }
         public DbSet<Category> Categories { get;set; }
         public DbSet<Cart> Carts { get;set; }
+        public DbSet<Order> Orders { get;set; }
     }
 }
